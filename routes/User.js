@@ -34,9 +34,26 @@ route.post('/addjob', async (req, res)=>{
     res.send('job data added.')
 })
 
-route.get('/findjobs', async (req, res)=>{
-    const addedJobData = await Addjob.find({skillRequired:{$in:['HTML']}})
+route.post('/findjobs', async (req, res)=>{
+    // const skills = ["NODE"]
+    const skills = req.body.skills
+    let searchFields;
+
+    if(skills.length==0){
+        searchFields = {}
+    }else{
+        searchFields = {skillRequired:{$in:[...skills]}}
+    }
+    const addedJobData = await Addjob.find({...searchFields})
+    // const addedJobData = await Addjob.find({skillRequired:{$in:["NODE"]}})
+    // const newdata =  await Addjob.find({$and:[{skillRequired:{$size:1}}, {skillRequired:{$in:['CSS', 'CSS']}}]})
+    // const addedJobData = await Addjob.find({$and:[{skillRequired:{$in:['NODE']}}, {skillRequired:{$lt:{$size:5}}}]})
     res.send(addedJobData)
+})
+
+route.get('/jobdetails/:id', async (req, res)=>{
+    const jobDetails = await Addjob.find({_id:req.params.id})
+    res.send(jobDetails)
 })
 
 
