@@ -14,10 +14,12 @@ route.get('/skills', async (req, res)=>{
 route.post('/addjob', async (req, res)=>{
     // const skill = req.body.requiredSkill.toUpperCase().split(',').filter(word => word.trim().length > 0)
     const skill = req.body.requiredSkill.toUpperCase().split(',').map((values)=>{return values.trim()})
+    const jobPosition = req.body.jobPosition.split(' ').map((values)=>{return values.charAt(0).toUpperCase()+values.slice(1)}).join(' ')
+
     const addJob = new Addjob({
         companyName:    req.body.companyName, 
         logoUrl:        req.body.logoUrl,
-        jobPosition:    req.body.jobPosition,
+        jobPosition:    jobPosition,
         monthlySallery: req.body.monthlySallery,
         jobType:        req.body.jobType,
         workFrom:       req.body.workFrom,
@@ -27,10 +29,9 @@ route.post('/addjob', async (req, res)=>{
         skillRequired:  skill,
         time:date
     })
-    if(skill){
+    if(skill && jobPosition){
         addJob.save()
     }
-    console.log(skill)
     res.send('job data added.')
 })
 
@@ -38,7 +39,6 @@ route.post('/findjobs', async (req, res)=>{
     // const skills = ["NODE"]
     const skills = req.body.skills
     let searchFields;
-
     if(skills.length==0){
         searchFields = {}
     }else{
