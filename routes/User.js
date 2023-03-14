@@ -88,10 +88,14 @@ route.put('/editdetails', async (req, res)=>{
                 skillRequired:skillRequired,
                 time:date
             }})
-    // console.log(userId)
     res.send('update data')
 })
 
+route.get('/:searchjob', async (req, res)=>{
+    var regex = new RegExp(req.params.searchjob, 'i')
+    const searchFile = await Addjob.find({jobPosition:regex})
+    res.send(searchFile)
+})
 
 
 
