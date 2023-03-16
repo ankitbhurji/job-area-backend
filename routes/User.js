@@ -41,7 +41,7 @@ route.get('/findjobs/:skills',  async (req, res)=>{
     if(skills=='null'){
         newSkill = {}
     }else{
-        newSkill = {skillRequired:{$in:[...skills]}}
+        newSkill = {skillRequired:{$all:[...skills]}}
     }
     const findData = await Addjob.find({...newSkill}).sort({time: -1})
     res.send(findData)
