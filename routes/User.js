@@ -66,7 +66,7 @@ route.post('/addjob', async (req, res)=>{
 // })
 
 
-route.get('/findjobs1/:skills',  async (req, res)=>{
+route.get('/findjobs/:skills',  async (req, res)=>{
     const skills = req.params.skills.split(',')
     let newSkill;
     if(skills=='null'){
