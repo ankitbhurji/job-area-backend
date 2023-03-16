@@ -40,21 +40,57 @@ route.post('/addjob', async (req, res)=>{
     res.send('job data added.')
 })
 
-route.post('/findjobs', async (req, res)=>{
-    // const skills = ["NODE"]
-    const skills = req.body.skills
-    let searchFields;
-    if(skills.length==0){
-        searchFields = {}
+
+
+
+
+
+
+
+
+
+// route.post('/findjobs', async (req, res)=>{
+//     // const skills = ["NODE"]
+//     const skills = req.body.skills
+//     let searchFields;
+//     if(skills.length==0){
+//         searchFields = {}
+//     }else{
+//         searchFields = {skillRequired:{$in:[...skills]}}
+//     }
+//     const addedJobData = await Addjob.find({...searchFields}).sort({time: -1})
+//     // const addedJobData = await Addjob.find({skillRequired:{$in:["NODE"]}})
+//     // const newdata =  await Addjob.find({$and:[{skillRequired:{$size:1}}, {skillRequired:{$in:['CSS', 'CSS']}}]})
+//     // const addedJobData = await Addjob.find({$and:[{skillRequired:{$in:['NODE']}}, {skillRequired:{$lt:{$size:5}}}]})
+//     res.send(addedJobData)
+// })
+
+
+route.get('/findjobs1/:skills',  async (req, res)=>{
+    const skills = req.params.skills.split(',')
+    let newSkill;
+    if(skills=='null'){
+        newSkill = {}
     }else{
-        searchFields = {skillRequired:{$in:[...skills]}}
+        newSkill = {skillRequired:{$in:[...skills]}}
     }
-    const addedJobData = await Addjob.find({...searchFields}).sort({time: -1})
-    // const addedJobData = await Addjob.find({skillRequired:{$in:["NODE"]}})
-    // const newdata =  await Addjob.find({$and:[{skillRequired:{$size:1}}, {skillRequired:{$in:['CSS', 'CSS']}}]})
-    // const addedJobData = await Addjob.find({$and:[{skillRequired:{$in:['NODE']}}, {skillRequired:{$lt:{$size:5}}}]})
-    res.send(addedJobData)
+    const findData = await Addjob.find({...newSkill}).sort({time: -1})
+    res.send(findData)
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 route.get('/jobdetails/:id', async (req, res)=>{
     const jobDetails = await Addjob.find({_id:req.params.id})
@@ -81,7 +117,7 @@ route.put('/editdetails', async (req, res)=>{
     const skillRequired =  skill
     const time =           req.body.time
 
-    await Addjob.updateMany(
+    const data = await Addjob.updateMany(
         {_id:userId},
         {$set:
             {
@@ -97,7 +133,7 @@ route.put('/editdetails', async (req, res)=>{
                 skillRequired :  skillRequired,
                 time :           time
             }})
-    res.send('update data')
+    res.send(data)
 })
 
 route.get('/:searchjob', async (req, res)=>{
