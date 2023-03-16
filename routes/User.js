@@ -10,11 +10,6 @@ route.get('/skills', async (req, res)=>{
     res.send(skill)
 })
 
-route.get('/alljobs', async (req, res)=>{
-    const alljobs = await Addjob.find().sort({time: -1})
-    res.send(alljobs)
-})
-
 route.post('/addjob', async (req, res)=>{
 
     const skill = req.body.requiredSkill.toUpperCase().split(',').map((values)=>{return values.trim()})
@@ -40,32 +35,6 @@ route.post('/addjob', async (req, res)=>{
     res.send('job data added.')
 })
 
-
-
-
-
-
-
-
-
-
-// route.post('/findjobs', async (req, res)=>{
-//     // const skills = ["NODE"]
-//     const skills = req.body.skills
-//     let searchFields;
-//     if(skills.length==0){
-//         searchFields = {}
-//     }else{
-//         searchFields = {skillRequired:{$in:[...skills]}}
-//     }
-//     const addedJobData = await Addjob.find({...searchFields}).sort({time: -1})
-//     // const addedJobData = await Addjob.find({skillRequired:{$in:["NODE"]}})
-//     // const newdata =  await Addjob.find({$and:[{skillRequired:{$size:1}}, {skillRequired:{$in:['CSS', 'CSS']}}]})
-//     // const addedJobData = await Addjob.find({$and:[{skillRequired:{$in:['NODE']}}, {skillRequired:{$lt:{$size:5}}}]})
-//     res.send(addedJobData)
-// })
-
-
 route.get('/findjobs/:skills',  async (req, res)=>{
     const skills = req.params.skills.split(',')
     let newSkill;
@@ -77,20 +46,6 @@ route.get('/findjobs/:skills',  async (req, res)=>{
     const findData = await Addjob.find({...newSkill}).sort({time: -1})
     res.send(findData)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 route.get('/jobdetails/:id', async (req, res)=>{
     const jobDetails = await Addjob.find({_id:req.params.id})
